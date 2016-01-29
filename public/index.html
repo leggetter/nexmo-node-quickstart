@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    
+    <title>Nexmo Node Quickstart</title>
+    
+    <meta name="description" content="Nexmo Node Quickstart">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="./css/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+  
+    <h1>Nexmo Node Quickstart</h1>
+    
+    <section class="input">
+      
+      <section class="sms">
+        
+        <h2>Send SMS</h2>
+        
+        <form action="/sms" method="post">
+          <input name="to_number" type="tel" placeholder="Send to Number" />
+          <textarea name="text" placeholder="Text to Send"></textarea>
+          <span class="char-count">0</span>
+          <input type="submit" value="Send" />
+        </form>
+      </section>
+      
+    </section>
+    
+    <section class="output">
+      
+      <h2>Logging Output</h2>
+      
+      <div id="log"></div>
+      
+    </section>
+    
+    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // Submit any FORM via an Ajax POST request
+      jQuery('form').submit(function(ev) {
+        ev.preventDefault();
+        
+        var form = jQuery(this);
+        jQuery.post(
+          form.attr('action'),
+          form.serialize(),
+          function(data) {
+            log('Server response', data);
+          }
+        );
+      });
+      
+      // Character counting for the SMS text entry
+      jQuery('.sms form textarea').on('keyup', function(ev) {
+        var textarea = jQuery(this);
+        var length = textarea.val().length;
+        jQuery('.sms form .char-count').text(length);
+      });
+    
+      // Utility logging function. Logs to console and page.
+      function log(description, data) {
+        var log = document.querySelector('#log');
+        log.innerHTML = (
+                          description + ': ' +
+                          JSON.stringify(data, null, 2) + 
+                          '<hr />' + 
+                          log.innerHTML
+                        );
+        
+        console.log(description + ': ', data);
+      }
+    
+      // Receive events from the server to display in the page.
+      var socket = io.connect('http://localhost:3000');
+      socket.on('sms:send', function(data) {
+        log('sms:send', data);
+      });
+      socket.on('sms:sending-error', function(data) {
+        log('sms:sending-error', data);
+      });
+      socket.on('sms:sending-success', function(data) {
+        log('sms:sending-success', data);
+      });
+      socket.on('sms:webhook', function(data) {
+        log('sms:webhook', data);
+      });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,39 @@
+body {
+  font-family: HelveticaNeue,"Helvetica Neue",Helvetica,Helvetica,Arial,"Lucida Grande",sans-serif;
+  color: #818789;
+  padding: 2%;
+}
+
+h1, h2, h3 {
+  color: #033f61;
+}
+
+form > * {
+  font-size: 1em;
+}
+
+.input {
+  float: left;
+  width: 40%;
+}
+
+.output {
+  float: right;
+  width: 40%;
+}
+
+.sms form > * {
+  float: left;
+  clear: both;
+  margin: 5px;
+}
+
+.sms input,
+.sms textarea {
+  width: 100%;
+  max-width: 300px;
+}
+
+.char-count::after {
+  content: ' chars'
+}
